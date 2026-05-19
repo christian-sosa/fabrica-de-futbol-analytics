@@ -1,0 +1,15 @@
+.venv/
+.env
+data/warehouse/
+data/raw/
+*.duckdb
+*.duckdb.wal
+*.parquet
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.streamlit/secrets.toml
+

@@ -1,0 +1,11 @@
+streamlit
+duckdb
+polars
+pandas
+plotly
+psycopg[binary]
+python-dotenv
+pydantic
+pytest
+ruff
+
