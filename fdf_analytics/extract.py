@@ -63,7 +63,10 @@ def extract_table(conn: psycopg.Connection[Any], schema: str, spec: TableSpec) -
     column_sql = ", ".join(quote_identifier(column) for column in selected_columns)
     table_sql = f"{quote_identifier(schema)}.{quote_identifier(spec.name)}"
     query = f"select {column_sql} from {table_sql}"
-    frame = pd.read_sql_query(query, conn)
+    with conn.cursor() as cur:
+        cur.execute(query)
+        rows = cur.fetchall()
+    frame = pd.DataFrame(rows, columns=selected_columns)
     return normalize_frame(spec.name, frame)
 
 
@@ -135,4 +138,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
