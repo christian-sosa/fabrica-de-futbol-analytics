@@ -23,6 +23,12 @@ python -m pip install -r requirements.txt
 
 Crear `.env` desde `.env.example` y configurar `SUPABASE_DB_URL` con un rol read-only.
 
+## Contrato de producto
+
+Los grupos/organizaciones son gratuitos: analytics no extrae ni modela billing,
+trials o checkout de MercadoPago para grupos. `mart_finance` solo consolida pagos
+de ligas, torneos y clubes.
+
 ## Correr con datos reales
 
 ```powershell
@@ -44,7 +50,7 @@ python -m streamlit run app.py --server.port 8501
 - `mart_growth_daily`: eventos por dia, fuente, funnel y CTA.
 - `mart_admin_usage`: logins por dia, admins activos y frecuencia.
 - `mart_product_activity`: grupos, jugadores y partidos creados/finalizados.
-- `mart_finance`: ingresos y cobros existentes por flujo.
+- `mart_finance`: ingresos y cobros de ligas, torneos y clubes; los grupos/organizaciones son gratuitos.
 - `mart_retention`: cohortes por fecha de creacion y actividad posterior.
 - `mart_entity_ranking`: ranking de entidades para priorizar seguimiento.
 

@@ -149,34 +149,6 @@ def load_sample_frames() -> dict[str, pd.DataFrame]:
                 },
             ]
         ),
-        "organization_billing_payments": pd.DataFrame(
-            [
-                {
-                    "id": "org-pay-1",
-                    "created_at": "2026-05-08T18:10:00Z",
-                    "organization_id": "org-1",
-                    "requested_by_admin_id": "admin-1",
-                    "created_organization_id": None,
-                    "amount": 14000,
-                    "currency_id": "ARS",
-                    "status": "approved",
-                    "purpose": "organization_subscription",
-                    "approved_at": "2026-05-08T18:20:00Z",
-                },
-                {
-                    "id": "org-pay-2",
-                    "created_at": "2026-05-12T18:10:00Z",
-                    "organization_id": "org-2",
-                    "requested_by_admin_id": "admin-2",
-                    "created_organization_id": "org-2",
-                    "amount": 14000,
-                    "currency_id": "ARS",
-                    "status": "pending",
-                    "purpose": "organization_creation",
-                    "approved_at": None,
-                },
-            ]
-        ),
         "league_billing_payments": pd.DataFrame(
             [
                 {
@@ -215,7 +187,7 @@ def load_sample_frames() -> dict[str, pd.DataFrame]:
                 event("evt-5", "2026-05-05T12:00:00Z", "admin_login_succeeded", "server", "admin-1", "org-1", None, None, "admin", "admin-1", "/admin/login", {"method": "password"}),
                 event("evt-6", "2026-05-05T19:00:00Z", "match_created", "server", "admin-1", "org-1", None, None, "match", "match-1", "/admin/matches/new", {"modality": "7v7"}),
                 event("evt-7", "2026-05-05T23:30:00Z", "match_finished", "server", "admin-1", "org-1", None, None, "match", "match-1", "/admin/matches/match-1", {"status": "finished"}),
-                event("evt-8", "2026-05-08T18:20:00Z", "payment_approved", "server", "admin-1", "org-1", None, None, "payment", "org-pay-1", None, {"flow": "organization_subscription"}),
+                event("evt-8", "2026-05-10T17:10:00Z", "payment_approved", "server", "admin-2", None, None, "league-1", "payment", "league-pay-1", None, {"flow": "league_creation"}),
                 event("evt-9", "2026-05-10T10:00:00Z", "group_shared", "whatsapp", None, "org-1", None, None, "organization", "org-1", "/groups/f7-palermo", {"content": "ranking"}),
                 event("evt-10", "2026-05-12T22:00:00Z", "admin_login_succeeded", "server", "admin-2", "org-2", None, None, "admin", "admin-2", "/admin/login", {"method": "oauth"}),
             ]
@@ -251,4 +223,3 @@ def event(
         "path": path,
         "properties": json.dumps(properties, sort_keys=True),
     }
-

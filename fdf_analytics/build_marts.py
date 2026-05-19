@@ -159,18 +159,7 @@ def build_marts(warehouse_path: Path) -> list[str]:
         con.execute(
             """
             create or replace table mart_finance as
-            with org_payments as (
-              select
-                cast(date_trunc('day', try_cast(created_at as timestamp)) as date) as payment_date,
-                'organization' as domain,
-                coalesce(nullif(cast(purpose as varchar), ''), 'organization_payment') as flow,
-                cast(organization_id as varchar) as entity_id,
-                cast(status as varchar) as status,
-                coalesce(try_cast(amount as double), 0) as expected_amount,
-                case when status = 'approved' then coalesce(try_cast(amount as double), 0) else 0 end as paid_amount,
-                coalesce(cast(currency_id as varchar), 'ARS') as currency
-              from raw_organization_billing_payments
-              union all
+            with payments as (
               select
                 cast(date_trunc('day', try_cast(created_at as timestamp)) as date) as payment_date,
                 'league' as domain,
@@ -209,7 +198,7 @@ def build_marts(warehouse_path: Path) -> list[str]:
               from raw_club_match_payments
             )
             select *
-            from org_payments
+            from payments
             where payment_date is not null
             order by payment_date, domain, flow
             """
@@ -262,12 +251,6 @@ def build_marts(warehouse_path: Path) -> list[str]:
                 count(*) filter (where status in ('finished', 'played')) as matches_finished
               from stg_matches
               group by all
-            ),
-            finance as (
-              select entity_id as organization_id, sum(expected_amount) as expected_amount, sum(paid_amount) as paid_amount
-              from mart_finance
-              where domain = 'organization'
-              group by all
             )
             select
               org.organization_id,
@@ -276,18 +259,14 @@ def build_marts(warehouse_path: Path) -> list[str]:
               coalesce(players.players, 0) as players,
               coalesce(matches.matches_created, 0) as matches_created,
               coalesce(matches.matches_finished, 0) as matches_finished,
-              coalesce(finance.expected_amount, 0) as expected_amount,
-              coalesce(finance.paid_amount, 0) as paid_amount,
               (
                 coalesce(players.players, 0)
                 + coalesce(matches.matches_created, 0) * 3
                 + coalesce(matches.matches_finished, 0) * 5
-                + case when coalesce(finance.paid_amount, 0) > 0 then 10 else 0 end
               ) as health_score
             from stg_organizations org
             left join player_counts players using (organization_id)
             left join match_counts matches using (organization_id)
-            left join finance using (organization_id)
             order by health_score desc, org.created_date desc
             """
         )
@@ -315,4 +294,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

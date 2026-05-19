@@ -87,7 +87,6 @@ create index if not exists idx_analytics_events_organization_created_at
 -- grant select on public.club_matches to analytics_reader;
 -- grant select on public.club_match_payments to analytics_reader;
 -- grant select on public.tournament_billing_payments to analytics_reader;
--- grant select on public.organization_billing_payments to analytics_reader;
 -- grant select on public.league_billing_payments to analytics_reader;
 -- create policy analytics_events_analytics_reader_select
 --   on public.analytics_events

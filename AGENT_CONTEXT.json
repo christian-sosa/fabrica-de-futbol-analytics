@@ -37,6 +37,23 @@
         "If an event property becomes a dashboard dimension, sanitize it at the app boundary first.",
         "The analytics repo must not use service role credentials."
       ]
+    },
+    {
+      "name": "group_organization_billing",
+      "app_source_of_truth": "commit 721a2f8 Remove group billing flow",
+      "analytics_consumers": [
+        "fdf_analytics/schemas.py",
+        "fdf_analytics/extract.py",
+        "fdf_analytics/build_marts.py",
+        "fdf_analytics/sample_data.py",
+        "app.py"
+      ],
+      "rules": [
+        "Groups and organizations are free.",
+        "Do not extract or depend on organization_billing_payments or organization_billing_subscriptions.",
+        "Do not model trials or MercadoPago checkout for groups.",
+        "mart_finance is based on league, tournament and club match payments only."
+      ]
     }
   ],
   "impact_rules": [

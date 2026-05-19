@@ -178,33 +178,6 @@ SOURCE_TABLES: dict[str, TableSpec] = {
             "approved_at": "TIMESTAMP",
         },
     ),
-    "organization_billing_payments": spec(
-        "organization_billing_payments",
-        (
-            "id",
-            "created_at",
-            "organization_id",
-            "requested_by_admin_id",
-            "created_organization_id",
-            "amount",
-            "currency_id",
-            "status",
-            "purpose",
-            "approved_at",
-        ),
-        {
-            "id": "VARCHAR",
-            "created_at": "TIMESTAMP",
-            "organization_id": "VARCHAR",
-            "requested_by_admin_id": "VARCHAR",
-            "created_organization_id": "VARCHAR",
-            "amount": "DOUBLE",
-            "currency_id": "VARCHAR",
-            "status": "VARCHAR",
-            "purpose": "VARCHAR",
-            "approved_at": "TIMESTAMP",
-        },
-    ),
     "league_billing_payments": spec(
         "league_billing_payments",
         (
@@ -231,4 +204,3 @@ SOURCE_TABLES: dict[str, TableSpec] = {
         },
     ),
 }
-

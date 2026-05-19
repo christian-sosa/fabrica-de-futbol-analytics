@@ -127,7 +127,7 @@ def main() -> None:
     cols = st.columns(4)
     cols[0].metric("Eventos", total_events)
     cols[1].metric("Admins activos", active_admins)
-    cols[2].metric("Cobrado", f"${paid_amount:,.0f}")
+    cols[2].metric("Cobrado ligas/torneos/clubes", f"${paid_amount:,.0f}")
     cols[3].metric("Partidos finalizados", finished_matches)
 
     tabs = st.tabs(["Overview", "Growth", "Uso admins", "Actividad", "Finanzas", "Ranking"])
@@ -150,7 +150,7 @@ def main() -> None:
                         x="status",
                         y=["expected_amount", "paid_amount"],
                         barmode="group",
-                        title="Esperado vs pagado",
+                        title="Esperado vs cobrado por ligas, torneos y clubes",
                     ),
                     use_container_width=True,
                 )
@@ -204,6 +204,7 @@ def main() -> None:
                     y=["expected_amount", "paid_amount"],
                     color="domain",
                     barmode="group",
+                    title="Cobros por flujo de ligas, torneos y clubes",
                 ),
                 use_container_width=True,
             )
@@ -215,7 +216,7 @@ def main() -> None:
                 ranking.head(20),
                 x="organization_name",
                 y="health_score",
-                hover_data=["players", "matches_created", "matches_finished", "paid_amount"],
+                hover_data=["players", "matches_created", "matches_finished"],
             ),
             use_container_width=True,
         )
@@ -231,4 +232,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
