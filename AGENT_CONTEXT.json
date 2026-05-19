@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "project": "fabrica-de-futbol-analytics",
+  "type": "analytics_portfolio",
+  "sibling_repositories": {
+    "app": "C:\\Users\\Christian\\Documents\\fabricadefutbol"
+  },
+  "runtime": {
+    "framework": "Streamlit",
+    "warehouse": "DuckDB",
+    "extract_source_schema": "analytics",
+    "verification": [
+      "python -m fdf_analytics.extract --sample",
+      "python -m fdf_analytics.build_marts",
+      "python -m pytest",
+      "python -m ruff check ."
+    ]
+  },
+  "orientation": {
+    "extract": ["fdf_analytics/extract.py", "fdf_analytics/schemas.py"],
+    "marts": ["fdf_analytics/build_marts.py"],
+    "dashboard": ["app.py"],
+    "sql": ["sql/analytics_events.sql"],
+    "tests": ["tests/test_marts.py"]
+  },
+  "contracts": [
+    {
+      "name": "analytics_events",
+      "app_source_of_truth": "src/lib/analytics/events.ts",
+      "analytics_consumers": [
+        "fdf_analytics/schemas.py",
+        "fdf_analytics/build_marts.py",
+        "app.py"
+      ],
+      "rules": [
+        "If a mart expects a new event, the app allowlist must include it.",
+        "If an event property becomes a dashboard dimension, sanitize it at the app boundary first.",
+        "The analytics repo must not use service role credentials."
+      ]
+    }
+  ],
+  "impact_rules": [
+    {
+      "id": "event-contract",
+      "description": "Extractor, schema, mart or dashboard changed around event usage.",
+      "regex": ["^fdf_analytics/schemas\\.py$", "^fdf_analytics/build_marts\\.py$", "^app\\.py$", "^sql/analytics_events\\.sql$"],
+      "review_repository": "C:\\Users\\Christian\\Documents\\fabricadefutbol",
+      "review_files": ["src/lib/analytics/events.ts", "src/lib/growth.ts", "src/app/api/analytics/events/route.ts", "src/types/database.ts"]
+    },
+    {
+      "id": "etl-contract",
+      "description": "Extraction contract changed; Supabase analytics views or app database types may need review.",
+      "regex": ["^fdf_analytics/extract\\.py$", "^fdf_analytics/schemas\\.py$"],
+      "review_repository": "C:\\Users\\Christian\\Documents\\fabricadefutbol",
+      "review_files": ["src/types/database.ts", "src/lib/queries/admin.ts"]
+    },
+    {
+      "id": "finance-dashboard",
+      "description": "Finance analytics changed; app payment flows may need matching events or fields.",
+      "regex": ["^fdf_analytics/build_marts\\.py$", "^app\\.py$"],
+      "review_repository": "C:\\Users\\Christian\\Documents\\fabricadefutbol",
+      "review_files": ["src/lib/domain/billing-workflow.ts", "src/lib/domain/tournament-billing-workflow.ts", "src/lib/payments"]
+    }
+  ]
+}

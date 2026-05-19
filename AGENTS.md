@@ -3,6 +3,8 @@
 ## Relacion Con La App Principal
 
 - Este repo consume datos de `C:\Users\Christian\Documents\fabricadefutbol`.
+- Para orientar agentes, leer `AGENT_CONTEXT.json`.
+- Antes de cerrar cambios que puedan cruzar repos, correr `python scripts/check_agent_impact.py`.
 - Si se cambia un mart, extractor, schema, SQL o dashboard que depende de eventos/producto, revisar si tambien hay que tocar:
   - `src/lib/analytics/`
   - `src/lib/growth.ts`
